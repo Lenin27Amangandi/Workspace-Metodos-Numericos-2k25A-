@@ -26,51 +26,51 @@ logging.info(datetime.now())
 import numpy as np
 
 
-# # ####################################################################
-# def gauss_jacobi(
-#     *, A: np.ndarray, b: np.ndarray, x: np.ndarray, tol: float, max_iter: int
-# ) -> np.ndarray:
-#     """Resuelve el sistema de ecuaciones lineales Ax = b mediante el método de Jacobi.
+# ####################################################################
+def gauss_jacobi2(
+    *, A: np.ndarray, b: np.ndarray, x: np.ndarray, tol: float, max_iter: int
+) -> np.ndarray:
+    """Resuelve el sistema de ecuaciones lineales Ax = b mediante el método de Jacobi.
 
-#     ## Parameters
-#     ``A``: Matriz de coeficientes del sistema de ecuaciones lineales.
-#     ``b``: Vector de términos independientes del sistema de ecuaciones lineales.
-#     ``x0``: Vector de aproximación inicial.
-#     ``tol``: Tolerancia.
-#     ``max_iter``: Número máximo de iteraciones.
+    ## Parameters
+    ``A``: Matriz de coeficientes del sistema de ecuaciones lineales.
+    ``b``: Vector de términos independientes del sistema de ecuaciones lineales.
+    ``x0``: Vector de aproximación inicial.
+    ``tol``: Tolerancia.
+    ``max_iter``: Número máximo de iteraciones.
 
-#     ## Return
-#     ``x``: Vector solución del sistema de ecuaciones lineales.
-#     """
-#     # --- Validación de los argumentos de la función ---
-#     if not isinstance(A, np.ndarray):
-#         logging.debug("Convirtiendo A a numpy array.")
-#         A = np.array(A, dtype=float)
-#     assert A.shape[0] == A.shape[1], "La matriz A debe ser de tamaño n-by-(n)."
+    ## Return
+    ``x``: Vector solución del sistema de ecuaciones lineales.
+    """
+    # --- Validación de los argumentos de la función ---
+    if not isinstance(A, np.ndarray):
+        logging.debug("Convirtiendo A a numpy array.")
+        A = np.array(A, dtype=float)
+    assert A.shape[0] == A.shape[1], "La matriz A debe ser de tamaño n-by-(n)."
 
-#     if not isinstance(b, np.ndarray):
-#         logging.debug("Convirtiendo b a numpy array.")
-#         b = np.array(b, dtype=float)
-#     assert b.shape[0] == A.shape[0], "El vector b debe ser de tamaño n."
+    if not isinstance(b, np.ndarray):
+        logging.debug("Convirtiendo b a numpy array.")
+        b = np.array(b, dtype=float)
+    assert b.shape[0] == A.shape[0], "El vector b debe ser de tamaño n."
 
-#     if not isinstance(x, np.ndarray):
-#         x = np.array(x, dtype=float, ndmin=2).T
-#     assert x.shape[0] == A.shape[0], "El vector x0 debe ser de tamaño n."
+    if not isinstance(x, np.ndarray):
+        x = np.array(x, dtype=float, ndmin=2).T
+    assert x.shape[0] == A.shape[0], "El vector x0 debe ser de tamaño n."
 
-#     # --- Algoritmo ---
-#     n = A.shape[0]
-#     logging.info(f"i= {0} x: {x.T}")
-#     for k in range(1, max_iter + 1):
-#         x_new = np.zeros((n, 1))  # prealloc
-#         for i in range(n):
-#             suma = sum([A[i, j] * x[j] for j in range(n) if j != i])
-#             x_new[i] = (b[i] - suma) / A[i, i]
+    # --- Algoritmo ---
+    n = A.shape[0]
+    logging.info(f"i= {0} x: {x.T}")
+    for k in range(1, max_iter + 1):
+        x_new = np.zeros((n, 1))  # prealloc
+        for i in range(n):
+            suma = sum([A[i, j] * x[j] for j in range(n) if j != i])
+            x_new[i] = (b[i] - suma) / A[i, i]
 
-#         if np.linalg.norm(x_new - x) < tol:
-#             return x_new
-#         x = x_new.copy()
-#         logging.info(f"i= {k} x: {x_new.T}")
-#     return x
+        if np.linalg.norm(x_new - x) < tol:
+            return x_new
+        x = x_new.copy()
+        logging.info(f"i= {k} x: {x_new.T}")
+    return x
 
 
 
@@ -144,22 +144,18 @@ def gauss_jacobi(
     if not isinstance(x, np.ndarray):
         x = np.array(x, dtype=float, ndmin=2).T
     assert x.shape[0] == A.shape[0], "El vector x0 debe ser de tamaño n."
-    
+
     n = A.shape[0]
-    
-    iterations = []  # Lista para guardar las soluciones de cada iteración
+    iterations = []
     for k in range(1, max_iter + 1):
         x_new = np.zeros((n, 1))  
         for i in range(n):
             suma = sum([A[i, j] * x[j] for j in range(n) if j != i])
             x_new[i] = (b[i] - suma) / A[i, i]
-
         iterations.append(x_new.copy())  # Guardamos la iteración
-        
         if np.linalg.norm(x_new - x) < tol:
             break
         x = x_new.copy()
-
     return iterations
 
 
